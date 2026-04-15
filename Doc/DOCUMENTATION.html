@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TicTacBoom — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --red:     #e63030;
+  --red2:    #ff4444;
+  --bg:      #0a0a0a;
+  --s1:      #111111;
+  --s2:      #1a1a1a;
+  --border:  #252525;
+  --text:    #e8e8e8;
+  --muted:   #666;
+  --green:   #22c55e;
+  --blue:    #3b82f6;
+  --yellow:  #eab308;
+  --purple:  #a855f7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '💣';
+  position: absolute;
+  font-size: 20rem;
+  opacity: 0.03;
+  top: -4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.logo {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  letter-spacing: 6px;
+  color: var(--red);
+  line-height: 1;
+}
+.logo span { color: var(--text); }
+.tagline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 4px;
+  margin-top: 0.6rem;
+}
+.badges {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  border: 1px solid;
+  letter-spacing: 1px;
+}
+.badge-red    { color: var(--red);    border-color: var(--red);    background: rgba(230,48,48,.08); }
+.badge-green  { color: var(--green);  border-color: var(--green);  background: rgba(34,197,94,.08); }
+.badge-blue   { color: var(--blue);   border-color: var(--blue);   background: rgba(59,130,246,.08); }
+.badge-yellow { color: var(--yellow); border-color: var(--yellow); background: rgba(234,179,8,.08); }
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 1rem 1.4rem;
+  white-space: nowrap;
+  transition: color .2s;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover { color: var(--text); border-bottom-color: var(--border); }
+
+/* ── MAIN ── */
+main { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+/* ── SECTION ── */
+section { margin-bottom: 5rem; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+h2 {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: 3px;
+  margin-bottom: 2rem;
+  line-height: 1;
+}
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: var(--text);
+}
+p { color: #aaa; font-size: 0.9rem; line-height: 1.7; margin-bottom: 1rem; }
+
+/* ── CARDS GRID ── */
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.card {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.4rem;
+}
+.card-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+.card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+.card p  { font-size: 0.82rem; color: var(--muted); margin: 0; }
+
+/* ── FILE TREE ── */
+.file-tree {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 2;
+}
+.tree-file { color: var(--text); }
+.tree-dir  { color: var(--blue); }
+.tree-comment { color: var(--muted); }
+.tree-indent1 { padding-left: 1.2rem; }
+.tree-indent2 { padding-left: 2.4rem; }
+.hl-red    { color: var(--red2); }
+.hl-green  { color: var(--green); }
+.hl-yellow { color: var(--yellow); }
+.hl-blue   { color: var(--blue); }
+.hl-purple { color: var(--purple); }
+
+/* ── FLOW DIAGRAM ── */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+.flow-box {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+.flow-arrow {
+  color: var(--muted);
+  font-size: 1.2rem;
+  padding: 0 0.4rem;
+}
+.flow-box.red    { border-color: var(--red);    color: var(--red2); }
+.flow-box.green  { border-color: var(--green);  color: var(--green); }
+.flow-box.blue   { border-color: var(--blue);   color: var(--blue); }
+.flow-box.yellow { border-color: var(--yellow); color: var(--yellow); }
+
+/* ── EVENTS TABLE ── */
+.events { display: flex; flex-direction: column; gap: 0.5rem; }
+.event-row {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.9rem 1.2rem;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+.event-name {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--yellow);
+  font-weight: 700;
+}
+.event-desc { color: #aaa; }
+.event-dir  {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.dir-cs { background: rgba(59,130,246,.15); color: var(--blue); }
+.dir-sc { background: rgba(230,48,48,.15);  color: var(--red2); }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--s2);
+}
+.code-filename {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.code-dots { display: flex; gap: 6px; }
+.code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+pre {
+  padding: 1.2rem 1.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: #ccc;
+}
+.kw  { color: var(--red2); }
+.fn  { color: var(--blue); }
+.str { color: var(--green); }
+.cm  { color: var(--muted); font-style: italic; }
+.num { color: var(--yellow); }
+
+/* ── STEPS ── */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1rem;
+  position: relative;
+}
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 48px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.step-num {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--s2);
+  border: 2px solid var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.3rem;
+  color: var(--red);
+  flex-shrink: 0;
+  z-index: 1;
+}
+.step-content { padding: 0.7rem 0 2rem; }
+.step-content h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+.step-content p  { font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+/* ── CMD ── */
+.cmd {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  margin: 0.5rem 0;
+}
+.cmd-prompt { color: var(--green); user-select: none; }
+.cmd code   { color: var(--text); }
+.cmd .path  { color: var(--blue); }
+
+/* ── TIMER VIZ ── */
+.timer-viz {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  height: 80px;
+  margin: 1.5rem 0;
+}
+.timer-bar {
+  border-radius: 4px 4px 0 0;
+  width: 36px;
+  background: var(--red);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  font-size: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,.7);
+}
+.timer-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+}
+.timer-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+/* ── DIVIDER ── */
+hr { border: none; border-top: 1px solid var(--border); margin: 4rem 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .event-row { grid-template-columns: 1fr; }
+  .event-dir { width: fit-content; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Tic Tac <span>Boom</span></div>
+  <div class="tagline">Documentation technique — Projet Ynov 2026</div>
+  <div class="badges">
+    <span class="badge badge-green">Node.js v24</span>
+    <span class="badge badge-blue">Socket.IO</span>
+    <span class="badge badge-red">Express</span>
+    <span class="badge badge-yellow">SQLite</span>
+    <span class="badge badge-green">336k mots FR</span>
+    <span class="badge badge-blue">20 joueurs max</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#archi">Architecture</a>
+  <a href="#fichiers">Fichiers</a>
+  <a href="#flux">Flux du jeu</a>
+  <a href="#sockets">Socket.IO</a>
+  <a href="#timer">Timer secret</a>
+  <a href="#bdd">Base de données</a>
+  <a href="#lancer">Lancer</a>
+</nav>
+
+<main>
+
+<!-- ────────── ARCHITECTURE ────────── -->
+<section id="archi">
+  <div class="section-label">01 — Vue d'ensemble</div>
+  <h2>Architecture</h2>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>Backend — Node.js</h3>
+      <p>Serveur Express + Socket.IO. Gère les rooms en mémoire, valide les mots, déclenche la bombe.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗄️</div>
+      <h3>Base de données — SQLite</h3>
+      <p>Stocke les scores, l'historique des parties et les syllabes personnalisées.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h3>Frontend — HTML/JS</h3>
+      <p>Interface servie par Express. Communique exclusivement via Socket.IO, pas d'API REST côté jeu.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem">
+    <h3>Communication temps réel</h3>
+    <div class="flow" style="margin-top:1rem">
+      <div class="flow-box blue">Navigateur<br><span style="font-size:.65rem;color:var(--muted)">app.js</span></div>
+      <div class="flow-arrow">⟷</div>
+      <div class="flow-box red">Socket.IO<br><span style="font-size:.65rem;color:var(--muted)">ws://</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box yellow">gamesocket.js<br><span style="font-size:.65rem;color:var(--muted)">logique jeu</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box green">gameState.js<br><span style="font-size:.65rem;color:var(--muted)">rooms mémoire</span></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted)">Le frontend n'appelle jamais l'API REST directement pendant la partie — tout passe par les événements Socket.IO.</p>
+  </div>
+</section>
+
+<!-- ────────── FICHIERS ────────── -->
+<section id="fichiers">
+  <div class="section-label">02 — Structure</div>
+  <h2>Fichiers du projet</h2>
+
+  <div class="file-tree">
+    <div><span class="tree-dir">TicTacBoom/</span></div>
+    <div class="tree-indent1"><span class="hl-green">index.html</span> <span class="tree-comment">— 4 écrans : accueil, lobby, jeu, classement</span></div>
+    <div class="tree-indent1"><span class="hl-blue">app.js</span> <span class="tree-comment">— frontend : Socket.IO client + sons + animations</span></div>
+    <div class="tree-indent1"><span class="tree-file">style.css</span> <span class="tree-comment">— thème rouge/noir, responsive</span></div>
+    <div class="tree-indent1"><span class="tree-dir">backend/</span></div>
+    <div class="tree-indent2"><span class="hl-red">server.js</span> <span class="tree-comment">— point d'entrée, Express + Socket.IO + static</span></div>
+    <div class="tree-indent2"><span class="tree-dir">game/</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="hl-yellow">gameState.js</span> <span class="tree-comment">— rooms en mémoire, timer aléatoire, joueurs</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="hl-yellow">dictionary.js</span> <span class="tree-comment">— 336 000 mots, validation accents/casse</span></div>
+    <div class="tree-indent2"><span class="tree-dir">socket/</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="hl-purple">gamesocket.js</span> <span class="tree-comment">— toute la logique : tours, bombe, scores, fin</span></div>
+    <div class="tree-indent2"><span class="tree-dir">db/</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="tree-file">database.js</span> <span class="tree-comment">— connexion SQLite, helpers run/get/all</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="tree-file">database.db</span> <span class="tree-comment">— fichier BDD (auto-créé)</span></div>
+    <div class="tree-indent2"><span class="tree-dir">routes/</span></div>
+    <div class="tree-indent2 tree-indent1"><span class="tree-file">games.js</span> <span class="tree-comment">— GET /api/games/scores, /api/games/historique</span></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:1.5rem">
+    <div class="card">
+      <h3>🧠 gameState.js</h3>
+      <p>C'est le "cerveau". Il stocke toutes les rooms en mémoire RAM (pas en BDD). Chaque room contient la liste des joueurs, la syllabe en cours, le timer, les mots déjà utilisés.</p>
+    </div>
+    <div class="card">
+      <h3>⚡ gamesocket.js</h3>
+      <p>C'est le "chef d'orchestre". Il reçoit les actions des joueurs, valide les mots, fait exploser la bombe, élimine les joueurs, détecte la fin de partie.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── FLUX ────────── -->
+<section id="flux">
+  <div class="section-label">03 — Déroulement</div>
+  <h2>Flux du jeu</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Création de la room</h3>
+        <p>Le host entre son pseudo et clique "Créer". Le serveur génère un code à 6 caractères unique (ex: <span style="font-family:monospace;color:var(--red2)">AB3C7F</span>). Les autres rejoignent avec ce code.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Lancement (host uniquement)</h3>
+        <p>Le host clique "Lancer". Minimum 2 joueurs requis, maximum 20. Le serveur démarre le premier tour.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Tour de jeu</h3>
+        <p>Un joueur reçoit une syllabe (ex: <span style="font-family:monospace;color:var(--red2)">OUR</span>). Il doit taper un mot qui la contient avant que la bombe explose. Le timer est <strong style="color:var(--red2)">secret et aléatoire</strong>.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Validation du mot</h3>
+        <p>Le serveur vérifie : le mot contient la syllabe ? Il est dans le dictionnaire (336k mots) ? Il n'a pas déjà été utilisé cette partie ? Si tout OK → +points, tour suivant.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Explosion</h3>
+        <p>Si le temps expire : -1 vie. À 0 vies, le joueur est éliminé. La partie continue jusqu'au dernier survivant.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h3>Fin de partie</h3>
+        <p>Le dernier joueur vivant gagne. Les scores sont sauvegardés en BDD. Le classement final s'affiche.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── SOCKETS ────────── -->
+<section id="sockets">
+  <div class="section-label">04 — Événements</div>
+  <h2>Socket.IO</h2>
+  <p>Toute la communication pendant la partie passe par ces événements. <span class="badge badge-blue" style="display:inline">C→S</span> = le client envoie. <span class="badge badge-red" style="display:inline">S→C</span> = le serveur envoie.</p>
+
+  <div style="margin-top:1.5rem">
+    <h3 style="color:var(--muted);font-size:.75rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:.8rem">Lobby</h3>
+    <div class="events">
+      <div class="event-row">
+        <div class="event-name">creerPartie</div>
+        <div class="event-desc">Crée une nouvelle room. Envoie <code style="color:var(--yellow)">{ pseudo }</code></div>
+        <div class="event-dir dir-cs">C → S</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">rejoindrePartie</div>
+        <div class="event-desc">Rejoint une room existante. Envoie <code style="color:var(--yellow)">{ pseudo, code }</code></div>
+        <div class="event-dir dir-cs">C → S</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">lancerPartie</div>
+        <div class="event-desc">Host uniquement. Lance la partie. Envoie <code style="color:var(--yellow)">{ code }</code></div>
+        <div class="event-dir dir-cs">C → S</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">partieCreee</div>
+        <div class="event-desc">Reçu par le host après création. Contient l'état complet de la room.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">misaJourRoom</div>
+        <div class="event-desc">Envoyé à tous quand un joueur rejoint ou quitte.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+    </div>
+
+    <h3 style="color:var(--muted);font-size:.75rem;letter-spacing:3px;text-transform:uppercase;margin: 1.5rem 0 .8rem">Pendant la partie</h3>
+    <div class="events">
+      <div class="event-row">
+        <div class="event-name">soumettreMotMain</div>
+        <div class="event-desc">Joueur soumet un mot. Envoie <code style="color:var(--yellow)">{ code, mot }</code></div>
+        <div class="event-dir dir-cs">C → S</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">nouveauTour</div>
+        <div class="event-desc">Début d'un tour. Contient <code style="color:var(--yellow)">room, joueurActuel, syllabe</code>. Pas de timer !</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">motAccepte</div>
+        <div class="event-desc">Mot valide. Contient <code style="color:var(--yellow)">mot, points, room</code> mis à jour.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">motRefuse</div>
+        <div class="event-desc">Mot invalide. Contient <code style="color:var(--yellow)">raison</code> (syllabe absente ou mot inconnu).</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">bombeExplosee</div>
+        <div class="event-desc">Timer écoulé. Contient <code style="color:var(--yellow)">joueurSocketId, viesRestantes</code>.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">joueurElimine</div>
+        <div class="event-desc">Joueur à 0 vies. Envoyé juste après bombeExplosee si vies = 0.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+      <div class="event-row">
+        <div class="event-name">partieTerminee</div>
+        <div class="event-desc">Un seul survivant. Contient <code style="color:var(--yellow)">gagnant, classement[]</code>.</div>
+        <div class="event-dir dir-sc">S → C</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── TIMER ────────── -->
+<section id="timer">
+  <div class="section-label">05 — Mécanique clé</div>
+  <h2>Timer secret</h2>
+
+  <p>Le timer n'est <strong style="color:var(--red2)">jamais envoyé au client</strong>. Seul le serveur sait quand la bombe explose. La bombe tremble de façon aléatoire — impossible de deviner le temps restant.</p>
+
+  <div style="margin-top:1.5rem">
+    <h3>Réduction progressive</h3>
+    <p style="margin-bottom:1rem">Chaque mot trouvé réduit le plafond du timer de 1 seconde. La pression monte sans que les joueurs s'en rendent compte.</p>
+
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-end;margin-top:1.5rem">
+      <div>
+        <div class="timer-label" style="margin-bottom:8px">Début de partie</div>
+        <div class="timer-viz">
+          <div class="timer-col">
+            <div class="timer-bar" style="height:8px;opacity:.3">8</div>
+            <div class="timer-label">min</div>
+          </div>
+          <div class="timer-col">
+            <div style="display:flex;align-items:center;height:80px;padding:0 8px;color:var(--muted);font-size:1.2rem">⟷</div>
+          </div>
+          <div class="timer-col">
+            <div class="timer-bar" style="height:80px">45</div>
+            <div class="timer-label">max</div>
+          </div>
+          <div class="timer-col">
+            <div style="padding:0 8px;color:var(--muted);font-size:.75rem;font-family:monospace">s</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="timer-label" style="margin-bottom:8px">Après 15 mots</div>
+        <div class="timer-viz">
+          <div class="timer-col">
+            <div class="timer-bar" style="height:8px;opacity:.3">8</div>
+            <div class="timer-label">min</div>
+          </div>
+          <div class="timer-col">
+            <div style="display:flex;align-items:center;height:80px;padding:0 8px;color:var(--muted);font-size:1.2rem">⟷</div>
+          </div>
+          <div class="timer-col">
+            <div class="timer-bar" style="height:59px">30</div>
+            <div class="timer-label">max</div>
+          </div>
+          <div class="timer-col">
+            <div style="padding:0 8px;color:var(--muted);font-size:.75rem;font-family:monospace">s</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="timer-label" style="margin-bottom:8px">Après 37 mots</div>
+        <div class="timer-viz">
+          <div class="timer-col">
+            <div class="timer-bar" style="height:8px;opacity:.3">8</div>
+            <div class="timer-label">min</div>
+          </div>
+          <div class="timer-col">
+            <div style="display:flex;align-items:center;height:80px;padding:0 8px;color:var(--muted);font-size:1.2rem">⟷</div>
+          </div>
+          <div class="timer-col">
+            <div class="timer-bar" style="height:15px;background:var(--red2)">8</div>
+            <div class="timer-label">max</div>
+          </div>
+          <div class="timer-col">
+            <div style="padding:0 8px;color:var(--muted);font-size:.75rem;font-family:monospace">s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-top:2rem">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="code-filename">gameState.js</div>
+      </div>
+      <pre><span class="kw">function</span> <span class="fn">dureeAleatoire</span>(reductionMs = <span class="num">0</span>) {
+  <span class="kw">const</span> max = Math.max(<span class="num">8000</span>, <span class="num">45000</span> - reductionMs)
+  <span class="kw">return</span> Math.floor(Math.random() * (max - <span class="num">8000</span> + <span class="num">1</span>)) + <span class="num">8000</span>
+}
+
+<span class="cm">// À chaque mot trouvé, dans gamesocket.js :</span>
+room.reductionMs += <span class="num">1000</span>  <span class="cm">// -1s au plafond</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ────────── BDD ────────── -->
+<section id="bdd">
+  <div class="section-label">06 — Persistance</div>
+  <h2>Base de données</h2>
+
+  <div class="grid grid-3" style="margin-bottom:2rem">
+    <div class="card">
+      <h3 style="color:var(--blue);font-family:monospace">players</h3>
+      <p>id, name, score<br>Score cumulé sur toutes les parties.</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--yellow);font-family:monospace">game</h3>
+      <p>id, started_at, ended_at, winner_id<br>Historique des parties.</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--green);font-family:monospace">words</h3>
+      <p>id, word<br>Syllabes custom ajoutées. Chargées au démarrage.</p>
+    </div>
+  </div>
+
+  <h3>Endpoints REST disponibles</h3>
+  <div class="events" style="margin-top:.8rem">
+    <div class="event-row">
+      <div class="event-name" style="color:var(--green)">GET /api/games/scores</div>
+      <div class="event-desc">Top 20 joueurs par score cumulé</div>
+      <div class="event-dir" style="background:rgba(34,197,94,.1);color:var(--green);padding:.2rem .5rem;border-radius:4px;font-family:monospace;font-size:.68rem">REST</div>
+    </div>
+    <div class="event-row">
+      <div class="event-name" style="color:var(--green)">GET /api/games/historique</div>
+      <div class="event-desc">20 dernières parties avec gagnant</div>
+      <div class="event-dir" style="background:rgba(34,197,94,.1);color:var(--green);padding:.2rem .5rem;border-radius:4px;font-family:monospace;font-size:.68rem">REST</div>
+    </div>
+  </div>
+
+  <div class="code-block" style="margin-top:1.5rem">
+    <div class="code-header">
+      <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+      <div class="code-filename">database.js — helpers async</div>
+    </div>
+    <pre><span class="cm">// Trois fonctions, même pattern :</span>
+<span class="kw">const</span> run = (sql, p) => <span class="kw">new</span> Promise(...)  <span class="cm">// INSERT / UPDATE</span>
+<span class="kw">const</span> get = (sql, p) => <span class="kw">new</span> Promise(...)  <span class="cm">// SELECT une ligne</span>
+<span class="kw">const</span> all = (sql, p) => <span class="kw">new</span> Promise(...)  <span class="cm">// SELECT plusieurs</span>
+
+<span class="cm">// Utilisation :</span>
+<span class="kw">const</span> joueur = <span class="kw">await</span> <span class="fn">get</span>(<span class="str">'SELECT id FROM players WHERE name = ?'</span>, [name])</pre>
+  </div>
+</section>
+
+<!-- ────────── LANCER ────────── -->
+<section id="lancer">
+  <div class="section-label">07 — Démarrage</div>
+  <h2>Lancer le projet</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Installer les dépendances</h3>
+        <div class="cmd"><span class="cmd-prompt">$</span><code><span class="path">cd TicTacBoom/backend</span> && npm install</code></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Démarrer le serveur</h3>
+        <div class="cmd"><span class="cmd-prompt">$</span><code>npm start</code></div>
+        <p>→ Le serveur tourne sur <code style="color:var(--green)">http://localhost:3001</code></p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Test local (2 onglets)</h3>
+        <p>Ouvrir <code style="color:var(--blue)">localhost:3001</code> dans deux onglets. Un crée, l'autre rejoint.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Exposer sur le réseau (ngrok)</h3>
+        <div class="cmd"><span class="cmd-prompt">$</span><code>ngrok http 3001</code></div>
+        <p>→ Partager l'URL ngrok à la classe. Tout le monde se connecte dessus.</p>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+
+</main>
+
+<footer style="border-top:1px solid var(--border);padding:2rem;text-align:center">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:3px">
+    TIC TAC BOOM — YNOV 2026 — NODE.JS + SOCKET.IO + SQLITE
+  </div>
+</footer>
+
+</body>
+</html>

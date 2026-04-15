@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Boom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── ÉCRAN 1 : ACCUEIL ── -->
+<section id="ecran-accueil" class="ecran actif">
+  <h1>TIC TAC <span>BOOM</span></h1>
+  <p class="sous-titre">consol.log("repeat, repeat")</p>
+
+  <div class="carte">
+    <label for="pseudo-creer">Votre pseudo</label>
+    <input type="text" id="pseudo-creer" placeholder="Ex : MAXIME" maxlength="16" />
+    <button class="btn btn-rouge" id="btn-creer">💣 Créer une partie</button>
+
+    <div class="separateur">ou</div>
+
+    <label for="pseudo-rejoindre">Votre pseudo</label>
+    <input type="text" id="pseudo-rejoindre" placeholder="Ex : SOPHIE" maxlength="16" />
+    <label for="code-input">Code de la room</label>
+    <input type="text" id="code-input" placeholder="Ex : AB3C7F" maxlength="6" style="text-transform:uppercase" />
+    <button class="btn btn-vide" id="btn-rejoindre">🚀 Rejoindre</button>
+
+    <p id="msg-accueil" class="msg-erreur" style="display:none"></p>
+  </div>
+</section>
+
+<!-- ── ÉCRAN 2 : LOBBY ── -->
+<section id="ecran-lobby" class="ecran">
+  <div class="code-room">
+    <div class="label">Code de la room</div>
+    <div class="code" id="lobby-code">——</div>
+    <div class="lien" id="lobby-lien" style="cursor:pointer">Cliquer pour copier</div>
+  </div>
+
+  <div class="carte">
+    <ul class="liste-joueurs" id="lobby-joueurs"></ul>
+    <p class="statut" id="lobby-statut" style="margin-bottom:1rem"></p>
+    <button class="btn btn-rouge" id="btn-lancer" style="display:none">🚀 Lancer la partie</button>
+    <p class="statut" id="msg-lobby" style="color:var(--gris)"></p>
+  </div>
+</section>
+
+<!-- ── ÉCRAN 3 : JEU ── -->
+<section id="ecran-jeu" class="ecran">
+
+  <div class="barre-joueurs" id="barre-joueurs"></div>
+
+  <div class="zone-centrale">
+    <div class="bombe" id="bombe-emoji">💣</div>
+    <div class="syllabe" id="syllabe-affichage">—</div>
+    <div class="tour-de">Tour de : <span id="nom-joueur-actuel">—</span></div>
+  </div>
+
+  <div>
+    <div class="zone-saisie">
+      <input type="text" id="input-mot" placeholder="Tapez un mot contenant la syllabe…" autocomplete="off" />
+      <button class="btn btn-rouge" id="btn-ok">OK</button>
+    </div>
+    <p id="msg-jeu" class="msg-feedback"></p>
+  </div>
+
+</section>
+
+<!-- ── ÉCRAN 4 : CLASSEMENT ── -->
+<section id="ecran-classement" class="ecran">
+  <h1 style="margin-bottom:1.5rem">FIN DE PARTIE</h1>
+
+  <div class="carte">
+    <div class="podium">
+      <div class="trophee">🏆</div>
+      <div class="label-g">Gagnant</div>
+      <div class="gagnant" id="gagnant-nom">—</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Joueur</th><th>Score</th><th>Vies</th></tr>
+      </thead>
+      <tbody id="classement-tbody"></tbody>
+    </table>
+
+    <button class="btn btn-vide" style="margin-top:1.2rem" id="btn-rejouer">🔄 Rejouer</button>
+  </div>
+</section>
+
+<!-- Socket.IO client (servi automatiquement par le backend) -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

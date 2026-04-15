@@ -1,0 +1,60 @@
+# Node.js
+node_modules/
+.env
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+
+# SQLite database
+backend/db/database.db
+backend/db/*.sqlite
+backend/db/*.db
+
+# OS files
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Build outputs
+dist/
+build/
+
+# Système
+*.swp
+*.swo
+
+# Autres fichiers temporaires
+*.tmp
+*.temp
+
+# Mac
+.DS_Store
+
+# Windows
+*.exe
+*.dll
+*.bat
+*.cmd
+
+# Tests
+coverage/
+
+# Documentation temporaire
+Doc/*.tmp
+
+# Son
+*.mp3
+*.wav
+*.ogg
+
+# Autres fichiers à ignorer
+*.zip
+*.tar.gz
+*.rar
+*.7z
